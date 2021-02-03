@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using IB.CSharpApiClient.Exceptions;
 using IB.CSharpApiClient.Messages;
 using IBApi;
 
@@ -42,9 +43,17 @@ namespace IB.CSharpApiClient
 
             ct.Token.Register(() =>
             {
-                res.TrySetCanceled();
+                res.TrySetException(new ScannerException("GetScannerDataAsync request timeout."));
             }, false);
 
+
+            void OnError(ErrorMessage msg)
+            {
+                if (msg.RequestId != reqId)
+                    return;
+
+                res.TrySetException(new ScannerException(msg.ToString(), msg.ErrorCode));
+            }
 
             void OnScannerData(ScannerDataMessage msg)
             {
@@ -62,6 +71,7 @@ namespace IB.CSharpApiClient
                 res.TrySetResult(messages);
             }
 
+            _clientMessage.Error += OnError;
             _clientMessage.ScannerData += OnScannerData;
             _clientMessage.ScannerDataEnd += OnScannerDataEnd;
 

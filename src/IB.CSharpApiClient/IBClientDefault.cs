@@ -4,6 +4,6 @@ namespace IB.CSharpApiClient
 {
     public class IBClientDefault
     {
-        public static TimeSpan Timeout { get; } = TimeSpan.FromSeconds(2);
+        public static TimeSpan Timeout { get; } = TimeSpan.FromSeconds(5);
     }
 }

@@ -11,11 +11,6 @@ namespace IB.CSharpApiClient
             return CreateNew(IBClientDefault.Timeout);
         }
 
-        public static IBClient CreateNew(int timeoutMs)
-        {
-            return CreateNew(TimeSpan.FromMilliseconds(timeoutMs));
-        }
-
         public static IBClient CreateNew(TimeSpan timeout)
         {
             var signal = new EReaderMonitorSignal();
